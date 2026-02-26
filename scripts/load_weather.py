@@ -13,6 +13,7 @@ import pandas as pd
 import os
 import logging
 from sqlalchemy import create_engine
+from urllib.parse import quote_plus  
 
 # Configure logging
 logging.basicConfig(
@@ -39,11 +40,13 @@ def load_weather():
         # Azure SQL connection details
         server = "kavya-weather-sql.database.windows.net"
         database = "weatherdb"
-        username = "sqladmin"
-        password = "Kodanchery@0803"
+        username = os.getenv("AZURE_SQL_USERNAME")
+        password = os.getenv("AZURE_SQL_PASSWORD")
+        password_encoded = quote_plus(password)
+
 
         connection_string = (
-            f"mssql+pyodbc://{username}:{password}@{server}:1433/"
+            f"mssql+pyodbc://{username}:{password_encoded}@{server}:1433/"
             f"{database}?driver=ODBC+Driver+18+for+SQL+Server"
         )
 
